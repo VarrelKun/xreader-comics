@@ -13,8 +13,9 @@ const ChapterDetail = () => {
     const navigate = useNavigate();
     const chapterContainerRef = useRef(null);
 
+    // Effect untuk menyimpan history jika dataDetail sudah ada
     useEffect(() => {
-        if (!dataDetail) return;
+        if (!dataDetail) return; // Jika dataDetail belum ada, tidak melanjutkan
         const timeNow = new Date().toISOString();
         const history = JSON.parse(localStorage.getItem("historyKomik")) || [];
         const existingIndex = history.findIndex((item) => item.title === dataDetail.title);
@@ -36,6 +37,7 @@ const ChapterDetail = () => {
         localStorage.setItem("historyKomik", JSON.stringify(history));
     }, [dataDetail, chapter]);
 
+    // Effect untuk mengambil data detail chapter
     useEffect(() => {
         const FetchDetail = async () => {
             setLoadingDetail(true);
@@ -43,11 +45,10 @@ const ChapterDetail = () => {
                 const response = await axios.get(
                     `https://api-xreader.vercel.app/api/manhwa-detail/${chapter.split("-chapter")[0]}`
                 );
-                console.log(response.data);
-                setDataDetail(response.data);
+                setDataDetail(response.data); // Menyimpan dataDetail
             } catch (error) {
                 console.error("Error :", error);
-                setDataDetail([]);
+                setDataDetail(null); // Jika error, dataDetail set null
             } finally {
                 setLoadingDetail(false);
             }
@@ -55,37 +56,42 @@ const ChapterDetail = () => {
         FetchDetail();
     }, [chapter]);
 
+    // Mendapatkan data dari getAnimeResponse
     const { data, loading } = getAnimeResponse(`chapter/${chapter}`);
     if (loading) {
-        return <Loading />;
+        return <Loading />; // Menampilkan loading saat menunggu data
     }
 
     if (loadingDetail) {
-        return <div></div>;
+        return <div></div>; // Menunggu data detail jika masih loading
+    }
+
+    if (!data || !dataDetail) {
+        return <div>Error: Data tidak ditemukan</div>; // Jika tidak ada data
     }
 
     // Fungsi untuk menangani scroll saat area kanan layar diklik
     const handleImageClick = (event) => {
-    const containerRect = chapterContainerRef.current.getBoundingClientRect();
-    const clickPosition = event.clientX;
-    const rightBoundary = containerRect.right * 0.85; // Hanya 85% sisi kanan yang bisa di-scroll
+        const containerRect = chapterContainerRef.current.getBoundingClientRect();
+        const clickPosition = event.clientX;
+        const rightBoundary = containerRect.right * 0.85; // Hanya 85% sisi kanan yang bisa di-scroll
 
-    if (clickPosition > rightBoundary) {
-        // Klik di area kanan yang diizinkan
-        window.scrollTo({
-            top: window.scrollY + window.innerHeight,
-            behavior: "smooth",
-        });
-    } else {
-        // Klik di area lainnya (misalnya di kiri atau di tengah)
-        setShowNavbar(!showNavbar);
-    }
-};
+        if (clickPosition > rightBoundary) {
+            // Klik di area kanan yang diizinkan
+            window.scrollTo({
+                top: window.scrollY + window.innerHeight,
+                behavior: "smooth",
+            });
+        } else {
+            // Klik di area lainnya (misalnya di kiri atau di tengah)
+            setShowNavbar(!showNavbar);
+        }
+    };
 
     return (
         <div ref={chapterContainerRef}>
             <div className="flex flex-col items-center">
-                {data.images.map((image, index) => (
+                {data.images?.map((image, index) => (
                     <img
                         className="w-full h-auto"
                         src={image}

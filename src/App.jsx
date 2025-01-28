@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/react"
 import { Route, Routes, useLocation } from "react-router-dom"
 import React, { lazy, Suspense } from "react"
 import "@/index.css"

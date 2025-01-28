@@ -10,7 +10,7 @@ const KomikList = () => {
         <div>
             <div className="flex flex-col items-center justify-center p-2">
                 <div className="flex">
-                    <img src="../assets/my.png" alt="Eclipse" className="w-40 h-auto" />
+                    <img src="../assets/20250128_230226.png" alt="Eclipse" className="w-40 h-auto" />
                 </div>
                 <span className="text-xs -mt-0">Baca Komik Bahasa Indonesia</span>
             </div>

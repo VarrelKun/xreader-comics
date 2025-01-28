@@ -9,11 +9,10 @@ const KomikList = () => {
     return (
         <div>
             <div className="flex flex-col items-center justify-center p-2">
-                <div className="flex text-4xl font-bold">
-                    <span className="">X</span>
-                    <span className="my">Reader</span>
+                <div className="flex">
+                    <img src="https://cdn.ryzendesu.vip/file/6PqItKlk14.png" alt="Eclipse" className="w-60 h-auto" />
                 </div>
-                <span className="text-xs -mt-2">Baca Komik Bahasa Indonesia</span>
+                <span className="text-xs -mt-0">Baca Komik Bahasa Indonesia</span>
             </div>
             <Recomend />
             <Update />

@@ -7,7 +7,7 @@ const BottomNavbar = ({ route }) => {
 
     return (
         <div className="fixed bottom-0 w-full h-14 z-50 bg-[#111111]/50 backdrop-blur-md rounded-t-xl flex items-center justify-around">
-            <div className="container flex justify-center gap-9 m-3">
+            <div className="container flex justify-center gap-7 m-3">
                 <NavLink to="/" className={`nav-links relative flex items-center justify-center grow p-2.5 ${getActive("/")}`}>
                     <FaHome className="text-xl" />
                 </NavLink>

@@ -4,7 +4,30 @@ import { FaStar } from "react-icons/fa6"
 import LoadingMini from "@/components/LoadingMini"
 
 const Viewed = () => {
-    const { data, loading } = getAnimeResponse("manhwa-recommendation")
+    // Cek apakah ada data yang sudah disimpan dalam localStorage dan belum expired
+    const cachedData = localStorage.getItem('manhwa-recommendation');
+    const cachedTime = localStorage.getItem('manhwa-recommendation-time');
+    const currentTime = new Date().getTime();
+    const cacheExpiryTime = 2 * 60 * 1000; // 2 menit
+
+    let data = null;
+    let loading = false;
+
+    // Jika data ada dan tidak expired, gunakan data dari cache
+    if (cachedData && cachedTime && currentTime - cachedTime < cacheExpiryTime) {
+        data = JSON.parse(cachedData);
+    } else {
+        // Ambil data dari API jika cache expired atau belum ada cache
+        const response = getAnimeResponse("manhwa-recommendation");
+        loading = response.loading;
+        data = response.data;
+
+        // Simpan data dan waktu terakhir ambil data ke localStorage
+        if (data) {
+            localStorage.setItem('manhwa-recommendation', JSON.stringify(data));
+            localStorage.setItem('manhwa-recommendation-time', currentTime);
+        }
+    }
 
     if (loading) {
         return <LoadingMini />

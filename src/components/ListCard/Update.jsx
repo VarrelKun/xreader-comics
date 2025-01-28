@@ -7,7 +7,7 @@ const Update = () => {
     const cachedData = localStorage.getItem('manhwa-new');
     const cachedTime = localStorage.getItem('manhwa-new-time');
     const currentTime = new Date().getTime();
-    const cacheExpiryTime = 30 * 60 * 1000; // 30 menit
+    const cacheExpiryTime = 2 * 60 * 1000; // 30 menit
 
     let data = null;
     let loading = false;

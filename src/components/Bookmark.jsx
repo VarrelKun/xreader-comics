@@ -28,13 +28,17 @@ const Bookmark = () => {
             <div className="grid grid-cols-3 gap-2 py-4">
                 {dataBookmark.map((komik,index) => (
                     <NavLink
-                        className="relative bg-cover bg-center inner-shadow-bottom w-full h-36 md:h-56 rounded-sm cursor-pointer overflow-hidden"
-                        style={{backgroundImage: `url(${komik.imageSrc})` }}
-                        to={`/komik/${komik.link}`}
-                        key={index}
-                    >
-                        <span className="absolute top-0 left-0 bg-blue-600 text-xs font-bold rounded-br-xl px-2 py-1">Ch. {komik.latestChapter.title.replace("Chapter ","")}</span>
-                        <div className="absolute top-[76px] left-0 flex items-center gap-1 p-1">
+  className="relative bg-cover bg-center w-full h-[170px] md:h-[100px] rounded-sm cursor-pointer overflow-hidden"
+  style={{
+    backgroundImage: `url(${komik.imageSrc})`,
+    boxShadow: 'inset 0 -40px 20px rgba(0, 0, 0, 0.8)', // Menambahkan inner shadow dengan opasitas lebih rendah
+    borderRadius: '8px' // Menjaga border-radius tetap
+  }}
+  to={`/komik/${komik.link}`}
+  key={index}
+>
+                        <span className="absolute top-0 left-0 bg-my text-black text-xs font-bold rounded-br-xl px-2 py-1">Ch. {komik.latestChapter.title.replace("Chapter ","")}</span>
+                        <div className="absolute top-[107px] left-0 flex items-center gap-1 p-1">
                             <FaStar className="text-yellow-300 text-xs z-50" />
                             <span className="text-white text-xs font-medium z-50">{komik.rating.slice(0,3)}</span>
                         </div>

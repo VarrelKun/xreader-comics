@@ -27,7 +27,7 @@ const Recomend = () => {
                                 .join(", ")}
                             </span>
                         </div>
-                        <button className="absolute bottom-2 bg-blue-600 text-white text-sm font-semibold px-2 py-1 rounded-md">
+                        <button className="absolute bottom-2 bg-my text-black text-sm font-semibold px-2 py-1 rounded-md">
                             Baca Sekarang
                         </button >
                     </div>

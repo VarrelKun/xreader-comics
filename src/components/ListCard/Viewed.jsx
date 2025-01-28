@@ -21,7 +21,7 @@ const Viewed = () => {
                         to={`/komik/${komik.link.split("/")[4]}`}
                         key={index}
                     >
-                        <span className="absolute top-0 left-0 bg-blue-600 text-xs font-bold rounded-br-xl px-2 py-1">Ch. {komik.chapter.replace("Chapter","")}</span>
+                        <span className="absolute top-0 left-0 bg-my text-black text-xs font-bold rounded-br-xl px-2 py-1">Ch. {komik.chapter.replace("Chapter","")}</span>
                         <div className="absolute top-[76px] left-0 flex items-center gap-1 p-1">
                             <FaStar className="text-yellow-300 text-xs z-50" />
                             <span className="text-white text-xs font-medium z-50">{komik.rating.slice(0,3)}</span>

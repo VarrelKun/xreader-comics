@@ -16,23 +16,29 @@ const App = () => {
     const location = useLocation()
 
     const shouldShowBottomNavBar = () => {
+        // Paths where bottom navbar should be shown
         const pathsToShowNavbar = ["/", "/info", "/bookmark", "/history", "/setting"]
         return (
             pathsToShowNavbar.some((path) => location.pathname.startsWith(path)) ||
             location.pathname.startsWith("/genres/")
         ) &&
-            !location.pathname.startsWith("/komik/") &&
-            !location.pathname.startsWith("/chapter/")
+            !location.pathname.startsWith("/komik/") && // Hide navbar in Komik details page
+            !location.pathname.startsWith("/chapter/") // Hide navbar in Chapter details page
     }
 
     return (
         <div
             id="app"
-            className={`min-h-screen bg-[#111111] text-white antialiased ${
+            className={`min-h-screen text-white antialiased ${
                 shouldShowBottomNavBar() ? "pb-[60px]" : "pb-0"
             }`}
+            style={{
+                backgroundImage: "url('https://files.catbox.moe/r3zsfk.jpg')", 
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+            }}
         >
-            <Suspense fallback={<div></div>}>
+            <Suspense fallback={<div>Loading...</div>}> {/* Placeholder during component loading */}
                 <Routes>
                     <Route path="/" element={<KomikList />} />
                     <Route path="/search" element={<SearchKomik />} />

@@ -14,12 +14,16 @@ const Update = () => {
             <div className="grid grid-cols-3 gap-2 py-2">
                 {data.slice(0,21).map((komik,index) => (
                     <NavLink
-                        className="relative bg-cover bg-center inner-shadow-bottom w-full h-36 md:h-56 rounded-sm cursor-pointer overflow-hidden"
-                        style={{backgroundImage: `url(${komik.imageSrc.split("?resize")[0]})` }}
-                        to={`/komik/${komik.link.split("/")[4]}`}
-                        key={index}
-                    >
-                        <span className="absolute top-0 left-0 bg-blue-600 text-xs font-bold rounded-br-xl px-2 py-1">
+  className="relative bg-cover bg-center w-full h-[170px] md:h-[100px] rounded-sm cursor-pointer overflow-hidden"
+  style={{
+    backgroundImage: `url(${komik.imageSrc})`,
+    boxShadow: 'inset 0 -40px 20px rgba(0, 0, 0, 0.8)', // Menambahkan inner shadow dengan opasitas lebih rendah
+    borderRadius: '8px' // Menjaga border-radius tetap
+  }}
+  to={`/komik/${komik.link.split("/")[4]}`}
+  key={index}
+>
+                        <span className="absolute top-0 left-0 bg-my text-black text-xs font-bold rounded-br-xl px-2 py-1">
                             {komik.chapters?.[0]?.chapterTitle 
                                 ? `Ch. ${komik.chapters[0].chapterTitle.replace("Ch.", "")}` 
                                 : "Ch. Error"}

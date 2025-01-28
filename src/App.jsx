@@ -30,14 +30,9 @@ const App = () => {
     return (
         <div
             id="app"
-            className={`min-h-screen text-white antialiased ${
+            className={`min-h-screen bg-[#111111] text-white antialiased ${
                 shouldShowBottomNavBar() ? "pb-[60px]" : "pb-0"
             }`}
-            style={{
-                backgroundImage: "url('https://files.catbox.moe/r3zsfk.jpg')", 
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-            }}
         >
             <Suspense fallback={<Loading/>}> {/* Placeholder during component loading */}
                 <Routes>

@@ -2,6 +2,7 @@ import { Route, Routes, useLocation } from "react-router-dom"
 import React, { lazy, Suspense } from "react"
 import "@/index.css"
 import BottomNavbar from "@/components/BottomNavbar"
+import Loading from "@/components/Loading"
 
 const KomikList = lazy(() => import("@/components/KomikList"))
 const SearchKomik = lazy(() => import("@/components/SearchKomik"))
@@ -38,7 +39,7 @@ const App = () => {
                 backgroundPosition: "center",
             }}
         >
-            <Suspense fallback={<div>Loading...</div>}> {/* Placeholder during component loading */}
+            <Suspense fallback={<Loading/>}> {/* Placeholder during component loading */}
                 <Routes>
                     <Route path="/" element={<KomikList />} />
                     <Route path="/search" element={<SearchKomik />} />

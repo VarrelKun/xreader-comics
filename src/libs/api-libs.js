@@ -9,7 +9,7 @@ const getAnimeResponse = (route) => {
         const FetchData = async () => {
             setLoading(true)
             try {
-                const response = await axios.get(`https://komiku.redzone.web.id/api/${route}`)
+                const response = await axios.get(`https://api-xreader.vercel.app/api/${route}`)
                 setData(response.data)
             } catch (error) {
                 console.error("Error :", error)

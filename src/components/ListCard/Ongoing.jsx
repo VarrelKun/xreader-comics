@@ -2,9 +2,33 @@ import { NavLink } from "react-router-dom"
 import getAnimeResponse from "@/libs/api-libs"
 
 const Ongoing = () => {
-    const { data, loading } = getAnimeResponse("manhwa-ongoing")
+    // Cek apakah ada data yang sudah disimpan dalam localStorage dan belum expired
+    const cachedData = localStorage.getItem('manhwa-ongoing');
+    const cachedTime = localStorage.getItem('manhwa-ongoing-time');
+    const currentTime = new Date().getTime();
+    const cacheExpiryTime = 30 * 60 * 1000; // 30 menit
+
+    let data = null;
+    let loading = false;
+
+    // Jika data ada dan tidak expired, gunakan data dari cache
+    if (cachedData && cachedTime && currentTime - cachedTime < cacheExpiryTime) {
+        data = JSON.parse(cachedData);
+    } else {
+        // Ambil data dari API jika cache expired atau belum ada cache
+        const response = getAnimeResponse("manhwa-ongoing");
+        loading = response.loading;
+        data = response.data;
+
+        // Simpan data dan waktu terakhir ambil data ke localStorage
+        if (data) {
+            localStorage.setItem('manhwa-ongoing', JSON.stringify(data));
+            localStorage.setItem('manhwa-ongoing-time', currentTime);
+        }
+    }
+
     if (loading) {
-        return <div></div>
+        return <div></div> // Tidak menampilkan loading jika data dari cache
     }
 
     return (

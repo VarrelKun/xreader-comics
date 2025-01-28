@@ -3,14 +3,38 @@ import getAnimeResponse from "@/libs/api-libs"
 import Loading from "@/components/Loading"
 
 const Recomend = () => {
-    const { data, loading } = getAnimeResponse("manhwa-top")
+    // Cek apakah ada data yang sudah disimpan dalam localStorage dan belum expired
+    const cachedData = localStorage.getItem('manhwa-top');
+    const cachedTime = localStorage.getItem('manhwa-top-time');
+    const currentTime = new Date().getTime();
+    const cacheExpiryTime = 30 * 60 * 1000; // 30 menit
+
+    let data = null;
+    let loading = false;
+
+    // Jika data ada dan tidak expired, gunakan data dari cache
+    if (cachedData && cachedTime && currentTime - cachedTime < cacheExpiryTime) {
+        data = JSON.parse(cachedData);
+    } else {
+        // Ambil data dari API jika cache expired atau belum ada cache
+        const response = getAnimeResponse("manhwa-top");
+        loading = response.loading;
+        data = response.data;
+
+        // Simpan data dan waktu terakhir ambil data ke localStorage
+        if (data) {
+            localStorage.setItem('manhwa-top', JSON.stringify(data));
+            localStorage.setItem('manhwa-top-time', currentTime);
+        }
+    }
+
     if (loading) {
-        return <div></div>
+        return <div></div> // Tidak menampilkan loading jika data dari cache
     }
     
     return (
         <div className="flex items-center scroll-page snap-x snap-mandatory pt-4 pb-2 overflow-x-auto">
-            {data.map((komik,index) => (
+            {data.map((komik, index) => (
                 <NavLink
                     className="relative flex shrink-0 snap-center w-full h-36 md:h-48 bg-black bg-cover bg-center text-white"
                     style={{backgroundImage: `url(${komik.image.split("?resize")[0]})`}}

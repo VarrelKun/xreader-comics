@@ -1,7 +1,7 @@
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import getAnimeResponse from "@/libs/api-libs";
-import { FaPaperPlane, FaUser, FaBookmark, FaTrash, FaArrowLeft, FaStar, FaCalendarDays, FaPaintbrush, FaReadme } from "react-icons/fa6";
+import { FaPaperPlane, FaUser, FaBookmark, FaTrash, FaArrowLeft, FaStar, FaCalendarDays, FaPaintbrush, FaReadme, FaRegCommentDots } from "react-icons/fa6";
 import { IoMdEye } from "react-icons/io";
 import Loading from "@/components/Loading";
 
@@ -10,14 +10,58 @@ const KomikDetail = () => {
   const navigate = useNavigate();
   const { komik } = useParams();
   const { data, loading } = getAnimeResponse(`manhwa-detail/${komik}`);
+  const commentBoxRef = useRef(null);
+  const scriptRef = useRef(null);
 
   useEffect(() => {
+    const loadCommentBox = async () => {
+      try {
+        if (!scriptRef.current) {
+          scriptRef.current = document.createElement("script");
+          scriptRef.current.src = "https://unpkg.com/commentbox.io/dist/commentBox.min.js";
+          scriptRef.current.async = true;
+          scriptRef.current.onerror = () => {
+            console.error("Failed to load CommentBox script");
+          };
+          document.body.appendChild(scriptRef.current);
+
+          await new Promise((resolve, reject) => {
+            scriptRef.current.onload = resolve;
+            scriptRef.current.onerror = reject;
+          });
+        }
+
+        if (window.commentBox) {
+          commentBoxRef.current = window.commentBox('5660104556806144-proj', {
+            className: 'commentbox',
+            defaultBoxId: `${komik}`,
+            textColor: 'white',
+          });
+        }
+      } catch (error) {
+        console.error("Error initializing CommentBox:", error);
+      }
+    };
+
+    loadCommentBox();
+
     if (data) {
       const checkBookmark = JSON.parse(localStorage.getItem("bookmarkKomik")) || [];
       const isBookmarked = checkBookmark.some((komik) => komik.title === data.title);
       setIsBookmark(isBookmarked);
     }
-  }, [data]);
+
+    return () => {
+      if (commentBoxRef.current) {
+        try {
+          commentBoxRef.current.destroy();
+          commentBoxRef.current = null;
+        } catch (error) {
+          console.error("Error destroying CommentBox:", error);
+        }
+      }
+    };
+  }, [komik, data]);
 
   if (loading) {
     return <Loading />;
@@ -123,7 +167,7 @@ const KomikDetail = () => {
         }
         <button
           onClick={shareUrl}
-          className="flex items-center gap-5 bg-[#212121] hover:bg-[#171717] w-1/2 text-white px-3 py-3 rounded-full "
+          className="flex items-center gap-5 bg-[#212121] hover:bg-[#171717] w-1/2 text-white px-3 py-3 rounded-full"
         >
           <FaPaperPlane className="text-xl my" />
           <span className="text-lg font-semibold">Bagikan</span>
@@ -135,7 +179,7 @@ const KomikDetail = () => {
       <div className="p-2">
         <span className="py-2 text-2xl font-extrabold">Chapter List :</span>
       </div>
-      <div className="container max-h-[600px] flex flex-col overflow-y-auto gap-3 rounded-md p-2">
+      <div className="container max-h-[250px] flex flex-col overflow-y-auto gap-1 rounded-md p-2">
         {data.chapters.map((chapter, index) => {
           const randomNumber = getRandomNumber(1, angka);
           return (
@@ -152,11 +196,17 @@ const KomikDetail = () => {
                   <span className="font-bold">{chapter.chapterNum}</span>
                   <span className="text-sm">{chapter.chapterDate}</span>
                 </div>
-                <FaReadme className="text-3xl" />
+                <FaReadme className="text-1xl" />
               </NavLink>
             </div>
           );
         })}
+      </div>
+
+      {/* Comments Section moved below Chapter List */}
+      <div className="p-4 mt-6 bg-[#212121] rounded-lg mx-3 max-h-[600px] overflow-y-auto">
+
+        <div className="commentbox" />
       </div>
     </div>
   );
